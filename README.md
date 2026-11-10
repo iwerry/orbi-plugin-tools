@@ -8,10 +8,12 @@ Plugins para **Adobe Premiere Pro** e **After Effects**, com motor nativo em **R
 ## Visual: Orbi Design System
 Os painéis seguem o **Orbi Design System** (Adaptive Soft UI) e têm 3 temas: **Escuro**, **Claro** e **Terminal**. O seletor fica no cabeçalho de cada painel, e a escolha vale para todos os painéis (`%APPDATA%\Orbi Plugin Tools\settings.json`). Fontes Manrope + DM Sans, ícones Lucide e uma só cor de ação (Orbit Lime; verde fósforo no Terminal).
 
-## O que já funciona (v0.2)
+## O que já funciona (v0.3.3)
 
 | Plugin | Premiere | After Effects |
 |---|---|---|
+| **Legendas dinâmicas**: SRT/VTT em blocos curtos | Faixa de legendas (estilo no painel Propriedades) | Uma camada de texto por bloco, com estilos (Clássico, Neon, Cinema), animações (Pop, Bounce, Subir, Fade) e o próprio texto como nome da camada |
+| **LUT Library**: LUTs da Adobe (AE, Premiere, Photoshop) e as suas | Lista e valida | Aplica pelo Cor de Lumetri (Look) nas camadas selecionadas ou numa camada de ajuste, com intensidade; "Adicionar LUTs…" e busca |
 | **Autocut**: remove silêncios. Ritmos Natural, **FastCut** e **HyperCut** (zoom de corte alternado); **J-cut / L-cut** opcional | Cria uma nova sequência sem os silêncios (XML, não destrutivo) ou só marca os silêncios | Divide as camadas e fecha os buracos, mantendo várias camadas em sincronia; ou só marca |
 | **BeatMarker**: marcadores no ritmo | Marcadores na sequência (todos os beats, 1 a cada 2, tempos fortes…) | Marcadores na camada ou na composição |
 | **AutoSoundFX**: efeitos sonoros próprios (sintetizados) nos cortes ou marcadores, com o pico alinhado | Faixa de áudio escolhida, sem sobrescrever áudio | Camadas de áudio |
@@ -20,12 +22,14 @@ Os painéis seguem o **Orbi Design System** (Adaptive Soft UI) e têm 3 temas: *
 ## Estrutura
 
 ```
-crates/orbi-engine     motor Rust (CLI JSON): áudio, silêncio, beats, XML FCP, LUT .cube, guias
+crates/orbi-engine     motor Rust (CLI JSON): áudio, silêncio, beats, XML FCP, LUT .cube, legendas, sons, guias
 crates/orbi-installer  instalador .exe único (extensões + motor embutidos)
 extensions/shared    código comum dos painéis: ponte CEP própria, cliente do motor, UI, fontes, logo
 extensions/com.orbi.*  um painel por plugin (index.html, js/main.js, host/premiere.jsx, host/aftereffects.jsx)
 tools/build.mjs      gera manifests e monta dist/
 tools/dev-install.ps1  instalação de desenvolvimento (sem admin, com DevTools)
+tools/make-test-luts.mjs  gera LUTs de teste em test-media/luts
+tools/probe-uxp-premiere  sonda da API UXP do Premiere (ver docs/ARCHITECTURE.md)
 docs/                arquitetura, roadmap, identidade visual
 ```
 
@@ -54,6 +58,18 @@ docs/                arquitetura, roadmap, identidade visual
 
 Observação: no Premiere, o áudio estéreo volta da nova sequência como A1 (L) + A2 (R). É assim que o XML FCP representa estéreo.
 
+## Validação v0.3 (10/11/2026 · Premiere Pro 26.5.2 · After Effects 26.5)
+
+| Teste | Resultado |
+|---|---|
+| Instalador 0.2.0 → 0.3.0 → 0.3.1 → 0.3.2 → 0.3.3 por cima, removendo a anterior | ✔ |
+| Legendas no AE: estilos e animações | ✔ |
+| Legendas no AE: nome da camada = texto (testado também com CJK, árabe, cirílico e emojis no Node) | ✔ |
+| LUT no AE: aplicar em camada selecionada e em camada de ajuste, intensidade, recusa segura sem reiniciar | ✔ |
+| LUT no AE: aba Adobe, "Adicionar LUTs…" | ✔ |
+| Sonda UXP no Premiere | ✔ (resultado em docs/ARCHITECTURE.md) |
+| Motor: 16 testes unitários | ✔ |
+
 ## Pré-requisitos (Windows)
 
 - Rust: https://rustup.rs (toolchain `stable-x86_64-pc-windows-msvc`, com o Visual Studio Build Tools)
@@ -65,7 +81,7 @@ Observação: no Premiere, o áudio estéreo volta da nova sequência como A1 (L
 powershell -ExecutionPolicy Bypass -File tools\dev-install.ps1
 ```
 Depois, reinicie o Premiere/AE e abra **Janela › Extensões (legado) › Orbi · …**.
-Para depurar, abra no Chrome `http://localhost:8800` (Autocut), `8810` (BeatMarker), `8820` (Margens) ou `8830` (AutoSoundFX).
+Para depurar, abra no Chrome a porta do painel (Premiere / After Effects): Autocut `8800`/`8801`, BeatMarker `8810`/`8811`, Legendas `8820`/`8821`, LUT Library `8830`/`8831`, Margens `8840`/`8841`, AutoSoundFX `8850`/`8851`. As portas só existem no modo dev.
 A cada mudança, rode `node tools/build.mjs --dev` e recarregue o painel.
 
 ## Gerar o instalador
@@ -83,7 +99,7 @@ Opções do instalador: `--uninstall`, `--silent`, `--no-debug-mode`, `--list`, 
 ## Testes
 
 ```bash
-cargo test -p orbi-engine        # silêncio, beats (click 120 BPM), XML, LUT, guias
+cargo test -p orbi-engine        # 16 testes: silêncio, beats, XML, LUT, legendas, sons, guias
 orbi-engine autocut pedido.json  # ver docs/ARCHITECTURE.md para o formato
 ```
 
@@ -92,4 +108,6 @@ orbi-engine autocut pedido.json  # ver docs/ARCHITECTURE.md para o formato
 - **Assinatura:** enquanto as extensões não forem assinadas, o instalador grava `PlayerDebugMode=1` (CSXS.9–14). Com certificado próprio, use `--no-debug-mode`.
 - **Autocut no Premiere** remonta V1 + A1/A2 a partir da faixa analisada (fluxo de vídeo falado). Efeitos e outras faixas não entram na nova sequência. Para preservar a timeline original, use o modo **Só marcadores**.
 - **After Effects 2026:** há relatos de painéis CEP que não aparecem em algumas instalações. Se acontecer, confira a pasta de extensões e o `PlayerDebugMode` antes de qualquer outra coisa.
-- Fonte **Plus Jakarta Sans** embutida sob a licença SIL OFL 1.1 (`extensions/shared/fonts`).
+- Fontes **Manrope** e **DM Sans** embutidas sob a licença SIL OFL 1.1 (`extensions/shared/fonts`).
+- **LUT nova no After Effects:** o Lumetri só lê a biblioteca quando o AE abre. Na primeira vez que uma LUT entra na biblioteca (`%APPDATA%\Adobe\Common\LUTs\Creative`), reinicie o AE uma vez.
+- **Licença:** proprietária, Draft Creative Studio Ltda (ver `LICENSE`).
