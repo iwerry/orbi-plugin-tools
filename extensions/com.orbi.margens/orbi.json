@@ -1,2 +1,2 @@
-{ "id": "com.orbi.margens", "name": "ORBI Margens", "menu": "Orbi · Margens (Safe Areas)", "version": "0.3.0",
+{ "id": "com.orbi.margens", "name": "ORBI Margens", "menu": "Orbi · Margens (Safe Areas)", "version": "0.3.1",
   "hosts": ["PPRO", "AEFT"], "width": 280, "height": 360 }

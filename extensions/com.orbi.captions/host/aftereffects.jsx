@@ -40,6 +40,19 @@ ORBI.captions.animate = function (tr, t0, t1, kind, w, h, cx, cy) {
   }
 };
 
+// Nome da camada = texto da legenda (qualquer idioma), numa linha só e com no máximo 60 caracteres.
+ORBI.captions.layerName = function (text, i) {
+  var s = String(text).replace(/[\r\n\t\u0000-\u001f]+/g, ' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+  var MAX = 60;
+  if (s.length > MAX) {
+    var cut = MAX - 1;
+    var code = s.charCodeAt(cut - 1);
+    if (code >= 0xD800 && code <= 0xDBFF) cut--; // não corta um emoji/caractere raro ao meio
+    s = s.substr(0, cut) + '…';
+  }
+  return s || ('Orbi Legenda ' + (i + 1));
+};
+
 ORBI.captions.create = function (a) {
   var comp = ORBI.ae.activeComp();
   var st = a.style;
@@ -67,7 +80,7 @@ ORBI.captions.create = function (a) {
       var tr = L.property('ADBE Transform Group');
       tr.property('ADBE Position').setValue([cx, cy]);
       ORBI.captions.animate(tr, c.start, Math.min(c.end, comp.duration), st.anim, comp.width, comp.height, cx, cy);
-      L.name = 'Orbi Legenda ' + (i + 1);
+      L.name = ORBI.captions.layerName(c.text, i);
       L.comment = ORBI.captions.TAG;
       n++;
     }

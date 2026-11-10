@@ -1,2 +1,2 @@
-{ "id": "com.orbi.captions", "name": "Orbi Legendas", "menu": "Orbi · Legendas dinâmicas", "version": "0.3.0",
+{ "id": "com.orbi.captions", "name": "Orbi Legendas", "menu": "Orbi · Legendas dinâmicas", "version": "0.3.1",
   "hosts": ["PPRO", "AEFT"], "width": 320, "height": 620 }

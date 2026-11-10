@@ -1,2 +1,2 @@
-{ "id": "com.orbi.luts", "name": "Orbi LUT Library", "menu": "Orbi · LUT Library", "version": "0.3.0",
+{ "id": "com.orbi.luts", "name": "Orbi LUT Library", "menu": "Orbi · LUT Library", "version": "0.3.1",
   "hosts": ["PPRO", "AEFT"], "width": 320, "height": 620 }

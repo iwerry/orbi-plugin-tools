@@ -3,7 +3,7 @@ resolver = "2"
 members = ["crates/orbi-engine", "crates/orbi-installer"]
 
 [workspace.package]
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 authors = ["Daniel Rodrigues <Draft Creative Studio Ltda>"]
 license = "LicenseRef-Proprietary"

@@ -8,7 +8,7 @@
 (function (global) {
   'use strict';
   var ORBI = global.ORBI = global.ORBI || {};
-  ORBI.VERSION = '0.3.0';
+  ORBI.VERSION = '0.3.1';
   ORBI.VENDOR = 'Draft Creative Studio Ltda';
   ORBI.AUTHOR = 'Daniel Rodrigues';
   var cep = global.__adobe_cep__;
@@ -38,8 +38,10 @@
 
   /** Chama ORBI.<caminho>(args) no host; o host devolve JSON {ok, ...}. */
   function call(fnPath, args) {
+    // Tudo que n\u00e3o \u00e9 ASCII vira \uXXXX: o ExtendScript recebe o texto intacto em qualquer idioma
+    // (acentos, CJK, \u00e1rabe, emojis), sem depender da codifica\u00e7\u00e3o do evalScript.
     var payload = JSON.stringify(args === undefined ? {} : args)
-      .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+      .replace(/[\u007f-\uffff]/g, function (ch) { return '\\u' + ('000' + ch.charCodeAt(0).toString(16)).slice(-4); });
     var script = 'ORBI.run(' + JSON.stringify(fnPath) + ',' + payload + ')';
     return evalRaw(script).then(function (txt) {
       var r;

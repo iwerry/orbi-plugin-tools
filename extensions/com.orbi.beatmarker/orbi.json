@@ -1,2 +1,2 @@
-{ "id": "com.orbi.beatmarker", "name": "ORBI BeatMarker", "menu": "Orbi · BeatMarker", "version": "0.3.0",
+{ "id": "com.orbi.beatmarker", "name": "ORBI BeatMarker", "menu": "Orbi · BeatMarker", "version": "0.3.1",
   "hosts": ["PPRO", "AEFT"], "width": 300, "height": 480 }
