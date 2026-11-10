@@ -1,0 +1,2 @@
+{ "id": "com.orbi.soundfx", "name": "Orbi AutoSoundFX", "menu": "Orbi · AutoSoundFX", "version": "0.3.0",
+  "hosts": ["PPRO", "AEFT"], "width": 320, "height": 640 }

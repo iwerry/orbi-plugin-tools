@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Orbi LUT Library</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('orbi.theme')||'dark')}catch(e){}</script>
+  <link rel="stylesheet" href="shared/css/orbi-ui.css">
+</head>
+<body data-ext="luts" data-title="LUT Library">
+
+  <section class="card">
+    <h2><i data-icon="sliders-horizontal"></i>Pasta de LUTs</h2>
+    <p class="hint">Escolha a pasta com seus arquivos .cube. Só a pasta escolhida é lida, sem subpastas.</p>
+    <button data-action="pick" id="btnPick"><i data-icon="film"></i>Escolher pasta…</button>
+    <p class="hint" id="folder">Nenhuma pasta escolhida.</p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="layers"></i>LUTs</h2>
+    <div class="stats">
+      <div><b id="sOk">–</b><span>válidas</span></div>
+      <div><b id="sBad">–</b><span>com erro</span></div>
+    </div>
+    <div id="list" class="lut-list"></div>
+    <p class="hint" id="detail"></p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="info"></i>Como aplicar</h2>
+    <p class="hint ppro-only">No Premiere, a aplicação automática depende da API de cor, que ainda não está liberada aqui. Selecione a LUT, copie o caminho e use Lumetri › Entrada LUT no clipe.</p>
+    <p class="hint ae-only">No After Effects, a aplicação automática virá na próxima etapa. Por ora, copie o caminho da LUT e use o efeito de LUT nativo do After.</p>
+  </section>
+
+  <div id="status" class="status"></div>
+
+  <script src="shared/js/orbi-bridge.js"></script>
+  <script src="shared/js/orbi-icons.js"></script>
+  <script src="shared/js/orbi-engine.js"></script>
+  <script src="shared/js/orbi-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

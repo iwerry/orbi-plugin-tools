@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>Orbi Legendas</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('orbi.theme')||'dark')}catch(e){}</script>
+  <link rel="stylesheet" href="shared/css/orbi-ui.css">
+</head>
+<body data-ext="captions" data-title="Legendas dinâmicas">
+
+  <section class="card">
+    <h2><i data-icon="layers"></i>Transcrição</h2>
+    <p class="hint">Use um SRT/VTT, por exemplo o exportado pela transcrição do Premiere (Texto › Legendas › Exportar SRT).</p>
+    <button data-action="pick" id="btnPick"><i data-icon="film"></i>Escolher SRT/VTT…</button>
+    <p class="hint" id="fileName">Nenhum arquivo escolhido.</p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="wand-sparkles"></i>Estilo</h2>
+    <div class="row">
+      <label for="words">Palavras por bloco</label><output id="words-v"></output>
+      <input type="range" id="words" min="1" max="6" step="1" value="3">
+    </div>
+    <label class="check"><input type="checkbox" id="upper" checked> CAIXA ALTA</label>
+    <label class="check"><input type="checkbox" id="strip" checked> Sem pontuação no fim</label>
+    <div class="ae-only">
+      <div class="row">
+        <label for="size">Tamanho</label><output id="size-v"></output>
+        <input type="range" id="size" min="30" max="160" step="2" value="84">
+      </div>
+      <div class="row">
+        <label for="ypos">Altura na tela</label><output id="ypos-v"></output>
+        <input type="range" id="ypos" min="10" max="90" step="1" value="68">
+      </div>
+      <div class="row">
+        <label for="look">Estilo</label>
+        <select id="look">
+          <option value="classico">Clássico (branco + lime)</option>
+          <option value="neon">Neon (contorno forte)</option>
+          <option value="cinema">Cinema (limpo, sem contorno)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="anim">Animação</label>
+        <select id="anim">
+          <option value="pop">Pop</option>
+          <option value="bounce">Bounce</option>
+          <option value="subir">Subir</option>
+          <option value="fade">Fade</option>
+          <option value="nenhuma">Nenhuma</option>
+        </select>
+      </div>
+    </div>
+    <p class="hint ppro-only">No Premiere, os blocos entram como faixa de legendas: o estilo (fonte, cor, posição) você ajusta no painel Propriedades.</p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="sparkles"></i>Resultado</h2>
+    <div class="stats">
+      <div><b id="sCues">–</b><span>legendas</span></div>
+      <div><b id="sChunks">–</b><span>blocos</span></div>
+      <div><b id="sWords">–</b><span>palavras</span></div>
+    </div>
+    <div class="actions">
+      <button data-action="apply" id="btnApply" class="primary wide"><i data-icon="play"></i>Criar legendas</button>
+      <button data-action="clear" id="btnClear" class="wide ae-only"><i data-icon="eraser"></i>Remover legendas Orbi</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+
+  <script src="shared/js/orbi-bridge.js"></script>
+  <script src="shared/js/orbi-icons.js"></script>
+  <script src="shared/js/orbi-engine.js"></script>
+  <script src="shared/js/orbi-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

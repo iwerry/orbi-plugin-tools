@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["crates/orbi-engine", "crates/orbi-installer"]
+
+[workspace.package]
+version = "0.3.0"
+edition = "2021"
+authors = ["Daniel Rodrigues <Draft Creative Studio Ltda>"]
+license = "LicenseRef-Proprietary"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

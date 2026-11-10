@@ -1,0 +1,6 @@
+/target
+/dist
+/out
+*.zxp
+*.pfx
+/logs

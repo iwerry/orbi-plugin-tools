@@ -1,0 +1,38 @@
+# Gera o Orbi-Plugin-Tools-Setup.exe no Windows a cada push/tag.
+name: build-windows
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: Swatinem/rust-cache@v2
+      - name: Testes do motor
+        run: cargo test -p orbi-engine --release
+      - name: Motor
+        run: cargo build -p orbi-engine --release
+      - name: Monta extensões (dist/)
+        run: node tools/build.mjs
+      - name: Instalador
+        run: cargo build -p orbi-installer --release
+      - name: Renomeia com a versão
+        shell: pwsh
+        run: |
+          $v = (Get-Content VERSION).Trim()
+          New-Item -ItemType Directory -Force out | Out-Null
+          Copy-Item target/release/Orbi-Plugin-Tools-Setup.exe "out/Orbi-Plugin-Tools-Setup-$v.exe"
+      # Assinatura de código (quando houver certificado):
+      # - name: Assinar
+      #   run: signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f cert.pfx /p ${{ secrets.CERT_PASSWORD }} out/*.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Orbi-Plugin-Tools-Setup
+          path: out/*.exe

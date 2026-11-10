@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>Orbi AutoSoundFX</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('orbi.theme')||'dark')}catch(e){}</script>
+  <link rel="stylesheet" href="shared/css/orbi-ui.css">
+</head>
+<body data-ext="soundfx" data-title="AutoSoundFX">
+
+  <section class="card">
+    <h2><i data-icon="film"></i>Onde inserir</h2>
+    <div class="seg">
+      <label><input type="radio" name="source" value="cuts" checked><span>Nos cortes</span></label>
+      <label><input type="radio" name="source" value="markers"><span>Nos marcadores</span></label>
+    </div>
+    <div class="ppro-only" id="trackRow">
+      <div class="row"><label for="vtrack">Cortes da faixa de vídeo</label></div>
+      <select id="vtrack"><option value="0">V1</option><option value="1">V2</option><option value="2">V3</option></select>
+    </div>
+    <p class="hint ae-only">Cortes: selecione as camadas cortadas (ex.: os trechos ✂ do Autocut). Marcadores: os da camada selecionada e da composição.</p>
+    <div class="row">
+      <label for="minGap">Intervalo mínimo entre sons</label><output id="minGap-v"></output>
+      <input type="range" id="minGap" min="0" max="3000" step="50" value="400">
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="music"></i>Som <span class="chip audio">sons próprios Orbi</span></h2>
+    <div class="seg" id="kinds">
+      <label><input type="radio" name="kind" value="mix" checked><span>Mix</span></label>
+      <label><input type="radio" name="kind" value="whoosh"><span>Whoosh</span></label>
+      <label><input type="radio" name="kind" value="swish"><span>Swish</span></label>
+    </div>
+    <div class="seg">
+      <label><input type="radio" name="kind" value="pop"><span>Pop</span></label>
+      <label><input type="radio" name="kind" value="click"><span>Click</span></label>
+      <label><input type="radio" name="kind" value="impact"><span>Impacto</span></label>
+      <label><input type="radio" name="kind" value="riser"><span>Riser</span></label>
+    </div>
+    <p class="hint" id="kindHint"></p>
+    <label class="check"><input type="checkbox" id="vary" checked> Alternar variações (evita som repetido)</label>
+    <div class="ppro-only">
+      <div class="row"><label for="atrack">Faixa de áudio dos efeitos</label></div>
+      <select id="atrack">
+        <option value="2">A3</option><option value="3" selected>A4</option><option value="4">A5</option><option value="5">A6</option><option value="6">A7</option><option value="7">A8</option>
+      </select>
+      <p class="hint">Se a faixa já tiver áudio naquele trecho, o efeito é pulado: nada é sobrescrito.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="sparkles"></i>Resultado</h2>
+    <div class="stats">
+      <div><b id="sPoints">–</b><span>pontos</span></div>
+      <div><b id="sPlaced">–</b><span>inseridos</span></div>
+      <div><b id="sSkipped">–</b><span>pulados</span></div>
+    </div>
+    <div class="actions">
+      <button data-action="insert" id="btnInsert" class="primary wide"><i data-icon="music"></i>Inserir efeitos</button>
+      <button data-action="clear" id="btnClear" class="wide"><i data-icon="eraser"></i>Remover efeitos Orbi</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+
+  <script src="shared/js/orbi-bridge.js"></script>
+  <script src="shared/js/orbi-icons.js"></script>
+  <script src="shared/js/orbi-engine.js"></script>
+  <script src="shared/js/orbi-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

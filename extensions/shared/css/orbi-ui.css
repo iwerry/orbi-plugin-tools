@@ -1,0 +1,354 @@
+/*
+ * Orbi Plugin Tools — Orbi Design System (Adaptive Soft UI) para painéis CEP.
+ * Três ambientes de luz: Escuro, Claro e Terminal. Trocar o tema só troca tokens;
+ * nada muda de tamanho ou de lugar.
+ * Draft Creative Studio Ltda · Creative Design & Software Development · Daniel Rodrigues
+ *
+ * Nota: o Chromium do CEP não suporta color-mix(); as misturas com o acento
+ * estão pré-calculadas por tema (--accent-*).
+ */
+
+/* ---------- Fontes (SIL OFL 1.1) ---------- */
+@font-face { font-family: "Manrope"; font-weight: 600; src: url("../fonts/manrope-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 700; src: url("../fonts/manrope-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 800; src: url("../fonts/manrope-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 400; src: url("../fonts/dm-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 500; src: url("../fonts/dm-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 600; src: url("../fonts/dm-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 700; src: url("../fonts/dm-sans-latin-700-normal.woff2") format("woff2"); }
+
+/* ---------- Tokens comuns ---------- */
+:root {
+  --orbi-lime: #bce64a;
+  --node-image: #5f9fd0;
+  --node-video: #4fbf9a;
+  --node-text: #9a7db0;
+  --node-audio: #e08a4b;
+
+  --font-display: "Manrope", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+
+  --radius-xs: 6px;
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+  --control-h: 34px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 150ms;
+  --dur-2: 220ms;
+  --fill: 50%;
+}
+
+/* ---------- Escuro (padrão) ---------- */
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --neo-bg: #121416;
+  --neo-bg-deep: #0b0d0f;
+  --neo-surface-solid: #202326;
+  --neo-text: #f0f2ef;
+  --neo-muted: #a2aaa5;
+  --neo-faint: #8a938e;
+  --neo-accent: #bce64a;
+  --neo-accent-ink: #bce64a;
+  --neo-accent-text: #1e2718;
+  --neo-purple: #b499cf;
+  --neo-border: rgba(255, 255, 255, 0.08);
+  --neo-line: rgba(255, 255, 255, 0.065);
+  --neo-shadow-dark: rgba(0, 0, 0, 0.62);
+  --neo-shadow-light: rgba(68, 73, 75, 0.2);
+  --neo-inset-dark: rgba(0, 0, 0, 0.5);
+  --accent-14: rgba(188, 230, 74, 0.14);
+  --accent-22: rgba(188, 230, 74, 0.22);
+  --accent-26: rgba(188, 230, 74, 0.26);
+  --accent-45: rgba(188, 230, 74, 0.45);
+  --accent-55: rgba(188, 230, 74, 0.55);
+  --ok: #bce64a;
+  --err: #ff7b7b;
+  --desk-bg: radial-gradient(circle at 78% 5%, rgba(225, 235, 240, 0.055), transparent 22rem),
+    radial-gradient(circle at 15% 92%, rgba(188, 230, 74, 0.055), transparent 20rem), #121416;
+}
+
+/* ---------- Claro (neumórfico) ---------- */
+html[data-theme="light"] {
+  color-scheme: light;
+  --neo-bg: #e8eeea;
+  --neo-bg-deep: #dfe7e2;
+  --neo-surface-solid: #edf2ef;
+  --neo-text: #27332c;
+  --neo-muted: #525e57;
+  --neo-faint: #58645d;
+  --neo-accent: #bce64a;
+  --neo-accent-ink: #4a6a2a;
+  --neo-accent-text: #29351f;
+  --neo-purple: #9b7bb6;
+  --neo-border: rgba(255, 255, 255, 0.7);
+  --neo-line: rgba(78, 98, 85, 0.1);
+  --neo-shadow-dark: rgba(87, 106, 94, 0.2);
+  --neo-shadow-light: rgba(255, 255, 255, 0.92);
+  --neo-inset-dark: rgba(96, 113, 102, 0.14);
+  --accent-14: rgba(188, 230, 74, 0.22);
+  --accent-22: rgba(188, 230, 74, 0.3);
+  --accent-26: rgba(120, 160, 50, 0.22);
+  --accent-45: rgba(110, 150, 40, 0.45);
+  --accent-55: rgba(110, 150, 40, 0.55);
+  --ok: #4a6a2a;
+  --err: #b3261e;
+  --desk-bg: #e8eeea;
+}
+
+/* ---------- Terminal (cyberpunk) ---------- */
+html[data-theme="terminal"] {
+  color-scheme: dark;
+  --neo-bg: #060908;
+  --neo-bg-deep: #020403;
+  --neo-surface-solid: #0d1812;
+  --neo-text: #dff8e8;
+  --neo-muted: #82b995;
+  --neo-faint: #5f8b70;
+  --neo-accent: #58f28b;
+  --neo-accent-ink: #58f28b;
+  --neo-accent-text: #041008;
+  --neo-purple: #c58cff;
+  --neo-border: rgba(91, 245, 137, 0.16);
+  --neo-line: rgba(91, 245, 137, 0.12);
+  --neo-shadow-dark: rgba(0, 0, 0, 0.72);
+  --neo-shadow-light: rgba(44, 92, 60, 0.15);
+  --neo-inset-dark: rgba(0, 0, 0, 0.62);
+  --accent-14: rgba(88, 242, 139, 0.12);
+  --accent-22: rgba(88, 242, 139, 0.22);
+  --accent-26: rgba(88, 242, 139, 0.26);
+  --accent-45: rgba(88, 242, 139, 0.45);
+  --accent-55: rgba(88, 242, 139, 0.55);
+  --ok: #58f28b;
+  --err: #ff5f7a;
+  --desk-bg: #060908;
+  --font-display: var(--font-mono);
+  --font-body: var(--font-mono);
+}
+
+/* Relevo: mesma receita em todos os temas (as cores acima mudam). */
+:root {
+  --shadow-raised: 3px 3px 8px var(--neo-shadow-dark), -3px -3px 8px var(--neo-shadow-light);
+  --shadow-raised-sm: 2px 2px 6px var(--neo-shadow-dark), -2px -2px 6px var(--neo-shadow-light);
+  --shadow-inset: inset 2px 2px 5px var(--neo-inset-dark), inset -2px -2px 5px var(--neo-shadow-light);
+  --glow-accent: 0 0 0 1px var(--accent-55), 0 6px 18px var(--accent-26);
+  --focus-ring: 0 0 0 3px var(--accent-22);
+}
+/* Terminal: o relevo dá lugar a bordas neon finas. */
+html[data-theme="terminal"] {
+  --shadow-raised: 0 0 0 1px var(--neo-border);
+  --shadow-raised-sm: 0 0 0 1px var(--neo-border);
+  --shadow-inset: inset 0 0 0 1px var(--neo-line);
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { background: var(--neo-bg); }
+body {
+  min-height: 100vh;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--desk-bg);
+  color: var(--neo-text);
+  font: 400 12.5px/1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+}
+::selection { background: var(--accent-45); color: var(--neo-text); }
+.ic { width: 15px; height: 15px; flex: none; vertical-align: -3px; }
+
+/* ---------- Cabeçalho ----------
+   Grid com coluna central minmax(0, 1fr): o título sempre encolhe (com reticências)
+   e nunca passa por baixo do indicador do app nem do seletor de tema. */
+header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  min-height: 32px;
+}
+header .mark { width: 22px; height: 22px; color: var(--neo-accent); }
+header .mark svg { display: block; width: 100%; height: 100%; }
+header .titles { display: flex; flex-direction: column; min-width: 0; overflow: hidden; line-height: 1.15; }
+header .brand,
+header h1 { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+header .brand { font: 600 11px/1.2 var(--font-body); color: var(--neo-muted); }
+header h1 { margin: 0; font: 700 15px/1.2 var(--font-display); letter-spacing: -0.02em; }
+header .tools { display: flex; align-items: center; gap: 6px; }
+header .host {
+  display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px;
+  border: 1px solid var(--neo-line); border-radius: var(--radius-pill);
+  background: var(--neo-surface-solid); color: var(--neo-muted); font: 600 11px/1 var(--font-body);
+  white-space: nowrap;
+}
+header .host::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--neo-faint); flex: none; }
+body.ready header .host::before { background: var(--neo-accent); box-shadow: 0 0 6px var(--accent-55); }
+/* Painel estreito: o indicador vira só o ponto (o nome do app fica no title). */
+@media (max-width: 330px) {
+  header .host { width: 24px; padding: 0; justify-content: center; font-size: 0; gap: 0; }
+}
+/* Muito estreito: o seletor de tema desce para uma segunda linha. */
+@media (max-width: 250px) {
+  header { grid-template-columns: auto minmax(0, 1fr); row-gap: 6px; }
+  header .tools { grid-column: 1 / -1; justify-content: flex-end; }
+}
+
+/* Seletor de tema (segmented: pressionado = inset) */
+.theme-switch {
+  display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--radius-m);
+  background: var(--neo-bg-deep); box-shadow: var(--shadow-inset);
+}
+.theme-switch button {
+  width: 26px; height: 24px; padding: 0; display: grid; place-items: center;
+  border: 0; border-radius: 9px; background: transparent; color: var(--neo-muted); cursor: pointer;
+  transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.theme-switch button .ic { width: 13px; height: 13px; }
+.theme-switch button:hover { color: var(--neo-text); }
+.theme-switch button.on { background: var(--neo-surface-solid); color: var(--neo-accent-ink); box-shadow: var(--shadow-raised-sm); }
+
+/* ---------- Cards ---------- */
+.card {
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 11px;
+  border: 1px solid var(--neo-line);
+  border-radius: var(--radius-l);
+  background: var(--neo-surface-solid);
+  box-shadow: var(--shadow-raised);
+}
+.card h2 {
+  margin: 0; display: flex; align-items: center; gap: 7px;
+  font: 700 13px/1.3 var(--font-display); letter-spacing: -0.01em; color: var(--neo-text);
+}
+.card h2 .ic { color: var(--neo-accent-ink); }
+.card h2 .chip { margin-left: auto; }
+
+/* ---------- Linhas com slider ---------- */
+.row { display: grid; grid-template-columns: 1fr auto; gap: 6px 8px; align-items: center; }
+.row label { font: 600 12px/1.3 var(--font-body); }
+.row output { font: 600 11px/1.3 var(--font-body); font-variant-numeric: tabular-nums; color: var(--neo-accent-ink); min-width: 52px; text-align: right; }
+.row input[type=range] { grid-column: 1 / -1; }
+
+input[type=range] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 3px 0;
+  border-radius: var(--radius-pill); outline: none; box-shadow: var(--shadow-inset);
+  background: linear-gradient(90deg, var(--neo-accent) var(--fill), var(--neo-bg-deep) var(--fill));
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; cursor: pointer;
+  background: var(--neo-surface-solid); border: 1px solid var(--neo-line); box-shadow: var(--shadow-raised-sm);
+  transition: box-shadow var(--dur-1) var(--ease-out);
+}
+input[type=range]:hover::-webkit-slider-thumb,
+input[type=range]:focus::-webkit-slider-thumb { box-shadow: var(--shadow-raised-sm), var(--focus-ring); }
+
+select, input[type=text], input[type=number] {
+  width: 100%; height: var(--control-h); padding: 0 10px;
+  border: 1px solid var(--neo-line); border-radius: var(--radius-s);
+  background: var(--neo-bg-deep); color: var(--neo-text); box-shadow: var(--shadow-inset);
+  font: 400 12.5px/1.5 var(--font-body); outline: none;
+  transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+}
+select:focus, input:focus { border-color: var(--accent-55); box-shadow: var(--shadow-inset), var(--focus-ring); }
+.check { display: flex; gap: 8px; align-items: center; cursor: pointer; font: 600 12px/1.3 var(--font-body); }
+.check input { accent-color: var(--neo-accent); margin: 0; width: 14px; height: 14px; }
+.field-label { font: 600 12px/1.3 var(--font-body); }
+
+/* Segmented control dos modos */
+.seg {
+  display: flex; padding: 3px; gap: 2px; border-radius: var(--radius-m);
+  background: var(--neo-bg-deep); box-shadow: var(--shadow-inset);
+}
+.seg label { flex: 1 1 0; min-width: 0; text-align: center; cursor: pointer; }
+.seg span {
+  display: flex; align-items: center; justify-content: center; gap: 5px; height: 28px; padding: 0 6px;
+  border-radius: 9px; color: var(--neo-muted); font: 600 11px/1.2 var(--font-body);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.seg span:hover { color: var(--neo-text); }
+.seg input { display: none; }
+.seg input:checked ~ span { background: var(--neo-surface-solid); color: var(--neo-text); box-shadow: var(--shadow-raised-sm); }
+.seg input:checked ~ span .ic { color: var(--neo-accent-ink); }
+
+/* ---------- Botões (34px, cantos 12px) ---------- */
+button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 0; min-height: var(--control-h); height: auto; padding: 6px 12px; text-align: center;
+  border: 1px solid var(--neo-line); border-radius: var(--radius-m);
+  background: var(--neo-surface-solid); color: var(--neo-text);
+  font: 600 12px/1.3 var(--font-body); box-shadow: var(--shadow-raised); cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+button:hover:not(:disabled) { border-color: var(--accent-45); }
+button:active:not(:disabled) { box-shadow: var(--shadow-inset); transform: scale(0.98); }
+button:focus-visible { outline: none; box-shadow: var(--shadow-raised), var(--focus-ring); }
+button.primary { padding: 6px 14px; border-color: transparent; background: var(--neo-accent); color: var(--neo-accent-text); }
+button.primary:hover:not(:disabled) { box-shadow: var(--glow-accent); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 250px) { .actions { grid-template-columns: minmax(0, 1fr); } }
+.actions .wide { grid-column: 1 / -1; }
+
+/* Chips (pílula, micro) */
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px;
+  border: 1px solid var(--neo-line); border-radius: var(--radius-pill);
+  background: var(--neo-bg-deep); color: var(--neo-muted); font: 600 11px/1.3 var(--font-body);
+}
+.chip.on { border-color: var(--accent-55); background: var(--accent-14); color: var(--neo-accent-ink); }
+.chip.audio { border-color: transparent; background: rgba(224, 138, 75, 0.16); color: var(--node-audio); }
+.chip.video { border-color: transparent; background: rgba(79, 191, 154, 0.16); color: var(--node-video); }
+
+/* ---------- Estatísticas ---------- */
+.stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 3px;
+  border-radius: var(--radius-m); background: var(--neo-bg-deep); box-shadow: var(--shadow-inset);
+}
+.stats div { padding: 7px 4px; text-align: center; border-radius: 9px; }
+.stats b { display: block; font: 800 17px/1.2 var(--font-display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stats span { color: var(--neo-faint); font: 600 11px/1.3 var(--font-body); }
+
+/* ---------- Status ---------- */
+.status { min-height: 18px; font: 400 12px/1.45 var(--font-body); color: var(--neo-muted); white-space: pre-wrap; display: flex; gap: 7px; align-items: flex-start; }
+.status.ok { color: var(--ok); }
+.status.error { color: var(--err); }
+.status.info { color: var(--neo-text); }
+.status.info::before {
+  content: ""; flex: none; width: 12px; height: 12px; margin-top: 2px; border-radius: 50%;
+  border: 2px solid var(--accent-26); border-top-color: var(--neo-accent);
+  animation: orbi-spin 0.8s linear infinite;
+}
+@keyframes orbi-spin { to { transform: rotate(360deg); } }
+.hint { margin: 0; color: var(--neo-faint); font: 400 12px/1.5 var(--font-body); }
+
+/* ---------- Créditos ---------- */
+footer.credits {
+  margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border-top: 1px solid var(--neo-line); text-align: center;
+}
+footer.credits .draft { height: 18px; width: auto; opacity: 0.92; }
+footer.credits .draft.on-light { display: none; }
+html[data-theme="light"] footer.credits .draft.on-dark { display: none; }
+html[data-theme="light"] footer.credits .draft.on-light { display: inline; }
+footer.credits .sig { font: 600 11px/1.45 var(--font-body); color: var(--neo-muted); }
+footer.credits .sig small { display: block; font: 400 11px/1.45 var(--font-body); color: var(--neo-faint); }
+
+body.busy { cursor: progress; }
+
+/* Elementos exclusivos por app */
+body.is-ppro .ae-only, body.is-ae .ppro-only { display: none !important; }
+
+/* LUT Library: lista de LUTs */
+.lut-list { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; margin-top: 8px; }
+.lut-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; text-align: left; min-width: 0; }
+.lut-item span { flex: 0 0 auto; font-size: 11px; opacity: 0.7; }
+.lut-item.bad { opacity: 0.6; }

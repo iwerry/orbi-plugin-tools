@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>Orbi Margens</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('orbi.theme')||'dark')}catch(e){}</script>
+  <link rel="stylesheet" href="shared/css/orbi-ui.css">
+</head>
+<body data-ext="margens" data-title="Margens">
+  <section class="card">
+    <h2><i data-icon="layout-template"></i>Plataforma</h2>
+    <div class="seg">
+      <label><input type="radio" name="profile" value="reels" checked><span>Reels</span></label>
+      <label><input type="radio" name="profile" value="shorts"><span>Shorts</span></label>
+      <label><input type="radio" name="profile" value="tiktok"><span>TikTok</span></label>
+    </div>
+    <p class="hint">A guia é gerada na resolução da sua <span class="ppro-only">sequência</span><span class="ae-only">composição</span>.
+      <span class="ae-only">No AE ela entra como camada-guia e não sai no render.</span>
+      <span class="ppro-only">No Premiere ela vai para a faixa de vídeo mais alta. Remova antes de exportar.</span></p>
+    <div class="actions">
+      <button data-action="add" id="btnAdd" class="primary"><i data-icon="layout-template"></i>Adicionar</button>
+      <button data-action="remove" id="btnRemove"><i data-icon="eraser"></i>Remover guias</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+  <script src="shared/js/orbi-bridge.js"></script>
+  <script src="shared/js/orbi-icons.js"></script>
+  <script src="shared/js/orbi-engine.js"></script>
+  <script src="shared/js/orbi-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

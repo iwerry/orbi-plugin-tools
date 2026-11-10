@@ -1,0 +1,9 @@
+{
+  "id": "com.orbi.autocut",
+  "name": "ORBI Autocut",
+  "menu": "Orbi · Autocut",
+  "version": "0.3.0",
+  "hosts": ["PPRO", "AEFT"],
+  "width": 320,
+  "height": 600
+}

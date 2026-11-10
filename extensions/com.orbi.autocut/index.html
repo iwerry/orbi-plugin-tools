@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <title>Orbi Autocut</title>
+  <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('orbi.theme')||'dark')}catch(e){}</script>
+  <link rel="stylesheet" href="shared/css/orbi-ui.css">
+</head>
+<body data-ext="autocut" data-title="Autocut">
+
+  <section class="card">
+    <h2><i data-icon="wand-sparkles"></i>Ritmo do corte</h2>
+    <div class="seg" id="presets">
+      <label><input type="radio" name="preset" value="natural" checked><span>Natural</span></label>
+      <label><input type="radio" name="preset" value="fast"><span>FastCut</span></label>
+      <label><input type="radio" name="preset" value="hyper"><span>HyperCut</span></label>
+      <label><input type="radio" name="preset" value="custom"><span>Livre</span></label>
+    </div>
+    <p class="hint" id="presetHint"></p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="audio-lines"></i>Fonte e detecção</h2>
+    <div class="ppro-only">
+      <div class="row"><label for="track">Faixa de áudio analisada</label></div>
+      <select id="track">
+        <option value="0">A1</option><option value="1">A2</option><option value="2">A3</option><option value="3">A4</option>
+      </select>
+    </div>
+    <label class="check"><input type="checkbox" id="selectedOnly"> <span class="ppro-only">Só clipes selecionados</span><span class="ae-only">Sincronizar todas as camadas selecionadas</span></label>
+    <p class="hint ae-only">A primeira camada selecionada com áudio é a referência; os mesmos cortes valem para as outras.</p>
+    <label class="check"><input type="checkbox" id="autoThr" checked> Limiar automático</label>
+    <div class="row" id="thrRow">
+      <label for="thr">Limiar</label><output id="thr-v"></output>
+      <input type="range" id="thr" min="-70" max="-10" step="1" value="-42">
+    </div>
+    <div class="row" id="biasRow">
+      <label for="bias">Sensibilidade</label><output id="bias-v"></output>
+      <input type="range" id="bias" min="5" max="80" step="1" value="35">
+    </div>
+    <div class="row">
+      <label for="minSil">Silêncio mínimo</label><output id="minSil-v"></output>
+      <input type="range" id="minSil" min="80" max="2000" step="10" value="350">
+    </div>
+    <div class="row">
+      <label for="padB">Margem antes da fala</label><output id="padB-v"></output>
+      <input type="range" id="padB" min="0" max="500" step="10" value="120">
+    </div>
+    <div class="row">
+      <label for="padA">Margem depois da fala</label><output id="padA-v"></output>
+      <input type="range" id="padA" min="0" max="800" step="10" value="180">
+    </div>
+    <div class="row">
+      <label for="minKeep">Fala mínima (ignora estalos)</label><output id="minKeep-v"></output>
+      <input type="range" id="minKeep" min="0" max="500" step="10" value="120">
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="zoom-in"></i>Zoom de corte <span class="chip" id="zoomChip">desligado</span></h2>
+    <label class="check"><input type="checkbox" id="zoomOn"> Punch-in alternado nos jump cuts</label>
+    <div class="row">
+      <label for="zoomScale">Escala do zoom</label><output id="zoomScale-v"></output>
+      <input type="range" id="zoomScale" min="102" max="140" step="1" value="115">
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="waves"></i>J-cut / L-cut</h2>
+    <div class="seg">
+      <label><input type="radio" name="jl" value="none" checked><span>Nenhum</span></label>
+      <label><input type="radio" name="jl" value="j"><span>J-cut</span></label>
+      <label><input type="radio" name="jl" value="l"><span>L-cut</span></label>
+    </div>
+    <div class="row">
+      <label for="jlMs">Sobreposição do áudio</label><output id="jlMs-v"></output>
+      <input type="range" id="jlMs" min="40" max="800" step="10" value="250">
+    </div>
+    <p class="hint">J: o som do próximo trecho entra antes da imagem. L: o som continua depois do corte. Suaviza os jump cuts.</p>
+  </section>
+
+  <section class="card">
+    <h2><i data-icon="sparkles"></i>Resultado</h2>
+    <div class="seg">
+      <label><input type="radio" name="mode" value="cut" checked><span class="ppro-only">Nova sequência</span><span class="ae-only">Cortar camadas</span></label>
+      <label><input type="radio" name="mode" value="markers"><span>Só marcadores</span></label>
+    </div>
+    <div class="stats">
+      <div><b id="sCuts">–</b><span>cortes</span></div>
+      <div><b id="sRemoved">–</b><span>removido</span></div>
+      <div><b id="sNew">–</b><span>nova duração</span></div>
+    </div>
+    <div class="actions">
+      <button data-action="analyze" id="btnAnalyze"><i data-icon="audio-lines"></i>Analisar</button>
+      <button data-action="apply" id="btnApply" class="primary"><i data-icon="play"></i>Aplicar</button>
+      <button data-action="clear" id="btnClear" class="wide"><i data-icon="eraser"></i>Limpar marcadores Orbi</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+
+  <script src="shared/js/orbi-bridge.js"></script>
+  <script src="shared/js/orbi-icons.js"></script>
+  <script src="shared/js/orbi-engine.js"></script>
+  <script src="shared/js/orbi-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
