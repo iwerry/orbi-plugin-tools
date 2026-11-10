@@ -352,3 +352,9 @@ body.is-ppro .ae-only, body.is-ae .ppro-only { display: none !important; }
 .lut-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; text-align: left; min-width: 0; }
 .lut-item span { flex: 0 0 auto; font-size: 11px; opacity: 0.7; }
 .lut-item.bad { opacity: 0.6; }
+.lut-item.on { border-color: var(--accent-55); background: var(--accent-14); color: var(--neo-accent-ink); }
+.tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.tabs .chip { cursor: pointer; }
+body[data-src="adobe"] .src-folder, body[data-src="folder"] .src-adobe { display: none; }
+#search { width: 100%; margin-top: 10px; box-sizing: border-box; }
+.lut-group { position: sticky; top: 0; z-index: 1; padding: 6px 2px 2px; font: 700 11px/1.3 var(--font-body); text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.75; background: var(--neo-surface-solid); }

@@ -8,7 +8,7 @@
 (function (global) {
   'use strict';
   var ORBI = global.ORBI = global.ORBI || {};
-  ORBI.VERSION = '0.3.1';
+  ORBI.VERSION = '0.3.3';
   ORBI.VENDOR = 'Draft Creative Studio Ltda';
   ORBI.AUTHOR = 'Daniel Rodrigues';
   var cep = global.__adobe_cep__;

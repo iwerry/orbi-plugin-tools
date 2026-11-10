@@ -9,26 +9,47 @@
 <body data-ext="luts" data-title="LUT Library">
 
   <section class="card">
-    <h2><i data-icon="sliders-horizontal"></i>Pasta de LUTs</h2>
-    <p class="hint">Escolha a pasta com seus arquivos .cube. Só a pasta escolhida é lida, sem subpastas.</p>
-    <button data-action="pick" id="btnPick"><i data-icon="film"></i>Escolher pasta…</button>
-    <p class="hint" id="folder">Nenhuma pasta escolhida.</p>
-  </section>
-
-  <section class="card">
     <h2><i data-icon="layers"></i>LUTs</h2>
-    <div class="stats">
-      <div><b id="sOk">–</b><span>válidas</span></div>
-      <div><b id="sBad">–</b><span>com erro</span></div>
+    <div class="tabs ae-only" role="tablist">
+      <button type="button" class="chip on" data-src="adobe" role="tab">Adobe</button>
+      <button type="button" class="chip" data-src="folder" role="tab">Minha pasta</button>
     </div>
+
+    <div class="src-folder">
+      <p class="hint">Escolha uma pasta com arquivos .cube para conferir. Só a pasta escolhida é lida, sem subpastas.</p>
+      <button data-action="pick" id="btnPick"><i data-icon="film"></i>Escolher pasta…</button>
+      <p class="hint" id="folder">Nenhuma pasta escolhida.</p>
+      <div class="stats">
+        <div><b id="sOk">–</b><span>válidas</span></div>
+        <div><b id="sBad">–</b><span>com erro</span></div>
+      </div>
+    </div>
+
+    <div class="src-adobe ae-only">
+      <p class="hint">LUTs que já vêm com After Effects, Premiere e Photoshop, mais as que você adicionou.</p>
+      <button data-action="add" id="btnAdd"><i data-icon="sliders-horizontal"></i>Adicionar LUTs…</button>
+    </div>
+
+    <input type="text" id="search" placeholder="Buscar LUT…" autocomplete="off">
     <div id="list" class="lut-list"></div>
     <p class="hint" id="detail"></p>
   </section>
 
-  <section class="card">
+  <section class="card ae-only">
+    <h2><i data-icon="play"></i>Aplicar</h2>
+    <p class="hint" id="chosen">Toque numa LUT da lista.</p>
+    <div class="row">
+      <label for="intensity">Intensidade</label><output id="intensity-v"></output>
+      <input type="range" id="intensity" min="0" max="100" step="1" value="100">
+    </div>
+    <button data-action="apply" id="btnApply" class="primary wide" disabled><i data-icon="play"></i>Aplicar LUT</button>
+    <p class="hint">Vai nas camadas selecionadas, com o efeito Cor de Lumetri (Look). Sem seleção, cria uma camada de ajuste.
+      LUT marcada com ↻ entra na sua biblioteca no primeiro uso e pede reiniciar o After Effects uma vez.</p>
+  </section>
+
+  <section class="card ppro-only">
     <h2><i data-icon="info"></i>Como aplicar</h2>
-    <p class="hint ppro-only">No Premiere, a aplicação automática depende da API de cor, que ainda não está liberada aqui. Selecione a LUT, copie o caminho e use Lumetri › Entrada LUT no clipe.</p>
-    <p class="hint ae-only">No After Effects, a aplicação automática virá na próxima etapa. Por ora, copie o caminho da LUT e use o efeito de LUT nativo do After.</p>
+    <p class="hint">No Premiere, a aplicação automática depende da API de cor, que ainda não está liberada aqui. Selecione a LUT e use Lumetri › Entrada LUT › Procurar no clipe com o caminho mostrado.</p>
   </section>
 
   <div id="status" class="status"></div>
