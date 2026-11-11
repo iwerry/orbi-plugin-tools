@@ -79,6 +79,8 @@ struct Layout {
     cep: PathBuf,
     /// Pasta do produto (motor, desinstalador, registro da instalação).
     app: PathBuf,
+    /// Presets .mogrt: aparecem no Premiere em Modelos de gráficos › Modelos locais › Orbi.
+    templates: PathBuf,
     /// true = instalação real no Windows (registro + processos).
     system: bool,
 }
@@ -86,7 +88,12 @@ struct Layout {
 impl Layout {
     fn detect(root: &Option<PathBuf>) -> Result<Layout> {
         if let Some(r) = root {
-            return Ok(Layout { cep: r.join("CEP/extensions"), app: r.join("Orbi Plugin Tools"), system: false });
+            return Ok(Layout {
+                cep: r.join("CEP/extensions"),
+                app: r.join("Orbi Plugin Tools"),
+                templates: r.join("Motion Graphics Templates/Orbi"),
+                system: false,
+            });
         }
         if !cfg!(windows) {
             bail!("Este instalador é para Windows. Use --root <pasta> para testar em outro sistema.");
@@ -94,7 +101,14 @@ impl Layout {
         let env = |k: &str, d: &str| std::env::var_os(k).map(PathBuf::from).unwrap_or_else(|| PathBuf::from(d));
         let common86 = env("CommonProgramFiles(x86)", r"C:\Program Files (x86)\Common Files");
         let pf = env("ProgramFiles", r"C:\Program Files");
-        Ok(Layout { cep: common86.join(r"Adobe\CEP\extensions"), app: pf.join("Orbi Plugin Tools"), system: true })
+        // Pasta de modelos locais do Premiere (por usuário). Com UAC na mesma conta, APPDATA é o do usuário.
+        let appdata = std::env::var_os("APPDATA").map(PathBuf::from).context("APPDATA não definido")?;
+        Ok(Layout {
+            cep: common86.join(r"Adobe\CEP\extensions"),
+            app: pf.join("Orbi Plugin Tools"),
+            templates: appdata.join(r"Adobe\Common\Motion Graphics Templates\Orbi"),
+            system: true,
+        })
     }
     fn bin(&self) -> PathBuf {
         self.app.join("bin")
@@ -110,6 +124,9 @@ struct Record {
     version: String,
     extensions: Vec<PathBuf>,
     app_dir: PathBuf,
+    /// Pasta dos presets .mogrt (ausente em instalações até a 0.3.x).
+    #[serde(default)]
+    templates: Option<PathBuf>,
 }
 
 fn banner() {
@@ -203,6 +220,17 @@ fn extensions() -> Vec<&'static Dir<'static>> {
     DIST.get_dir("extensions").map(|d| d.dirs().collect()).unwrap_or_default()
 }
 
+fn mogrt_dir() -> Option<&'static Dir<'static>> {
+    DIST.get_dir("mogrt")
+}
+
+fn count_files(d: &Dir) -> usize {
+    d.entries().iter().map(|e| match e {
+        DirEntry::Dir(s) => count_files(s),
+        DirEntry::File(_) => 1,
+    }).sum()
+}
+
 fn engine_file() -> Option<&'static include_dir::File<'static>> {
     DIST.get_dir("bin").and_then(|b| b.files().find(|f| f.path().file_name().map(|n| n.to_string_lossy().starts_with("orbi-engine")).unwrap_or(false)))
 }
@@ -278,6 +306,15 @@ fn install(o: &Opts, l: &Layout) -> Result<()> {
         }
         None => println!("  ⚠ Motor orbi-engine não embutido (os painéis vão avisar)."),
     }
+    if let Some(m) = mogrt_dir() {
+        if l.templates.exists() {
+            std::fs::remove_dir_all(&l.templates).with_context(|| format!("removendo {}", l.templates.display()))?;
+        }
+        let mut n = 0;
+        write_tree(m, m.path(), &l.templates, &mut n)?;
+        println!("  ✓ Presets .mogrt  ({n})  → {}", l.templates.display());
+        rec.templates = Some(l.templates.clone());
+    }
     // O próprio instalador vira o desinstalador.
     let uninstaller = l.app.join("Desinstalar Orbi Plugin Tools.exe");
     if let Ok(me) = std::env::current_exe() {
@@ -342,6 +379,12 @@ fn migrate_legacy(l: &Layout) {
 
 fn remove_files(l: &Layout, all: bool) -> Result<()> {
     let rec: Record = std::fs::read(l.record()).ok().and_then(|b| parse_record(&b)).unwrap_or_default();
+    // Presets .mogrt: a pasta registrada e a pasta padrão desta máquina.
+    for t in rec.templates.iter().chain(std::iter::once(&l.templates)) {
+        if t.exists() && std::fs::remove_dir_all(t).is_ok() {
+            println!("  ✗ {}", t.display());
+        }
+    }
     let mut targets = rec.extensions;
     // Também limpa qualquer com.orbi.* que tenha ficado para trás.
     if let Ok(rd) = std::fs::read_dir(&l.cep) {
@@ -391,6 +434,10 @@ fn list() {
     match engine_file() {
         Some(f) => println!("   • {} ({} KB)", f.path().display(), f.contents().len() / 1024),
         None => println!("   • (motor ausente)"),
+    }
+    match mogrt_dir() {
+        Some(m) => println!("   • mogrt/ ({} presets)", count_files(m)),
+        None => println!("   • (sem presets .mogrt)"),
     }
 }
 

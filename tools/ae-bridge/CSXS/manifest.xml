@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Ferramenta de desenvolvimento: deixa o Claude Code rodar ExtendScript no After Effects pelo DevTools (porta 8899).
+     Instalar e usar: ver o cabeçalho de tools/ae-eval.mjs -->
+
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.orbi.dev-bridge" ExtensionBundleVersion="0.1.0"
+  ExtensionBundleName="Orbi Ponte Dev" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ExtensionList>
+    <Extension Id="com.orbi.dev-bridge.panel" Version="0.1.0"/>
+  </ExtensionList>
+  <ExecutionEnvironment>
+    <HostList>
+      <Host Name="AEFT" Version="[23.0,99.9]"/>
+    </HostList>
+    <LocaleList><Locale Code="All"/></LocaleList>
+    <RequiredRuntimeList><RequiredRuntime Name="CSXS" Version="9.0"/></RequiredRuntimeList>
+  </ExecutionEnvironment>
+  <DispatchInfoList>
+    <Extension Id="com.orbi.dev-bridge.panel">
+      <DispatchInfo>
+        <Resources>
+          <MainPath>./index.html</MainPath>
+        </Resources>
+        <Lifecycle><AutoVisible>true</AutoVisible></Lifecycle>
+        <UI>
+          <Type>Panel</Type>
+          <Menu>Orbi · Ponte Dev</Menu>
+          <Geometry>
+            <Size><Width>300</Width><Height>160</Height></Size>
+          </Geometry>
+        </UI>
+      </DispatchInfo>
+    </Extension>
+  </DispatchInfoList>
+</ExtensionManifest>

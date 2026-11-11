@@ -122,6 +122,19 @@ if (engineSrc) {
   console.warn('⚠ orbi-engine não compilado ainda — rode: cargo build --release -p orbi-engine');
 }
 
-fs.writeFileSync(path.join(dist, 'manifest.json'), JSON.stringify({ version, vendor: 'Draft Creative Studio Ltda', extensions: listing }, null, 2));
+// Presets .mogrt (gerados no AE por tools/mogrt/build.ps1 e versionados em assets/mogrt)
+const mogrtSrc = path.join(root, 'assets', 'mogrt');
+const mogrtDst = path.join(dist, 'mogrt');
+rm(mogrtDst);
+let mogrts = 0;
+if (fs.existsSync(mogrtSrc)) {
+  copyDir(mogrtSrc, mogrtDst);
+  const count = (d) => fs.readdirSync(d, { withFileTypes: true }).reduce((n, e) =>
+    n + (e.isDirectory() ? count(path.join(d, e.name)) : (e.name.endsWith('.mogrt') ? 1 : 0)), 0);
+  mogrts = count(mogrtDst);
+}
+
+fs.writeFileSync(path.join(dist, 'manifest.json'), JSON.stringify({ version, vendor: 'Draft Creative Studio Ltda', extensions: listing, mogrts }, null, 2));
+console.log(`Presets .mogrt: ${mogrts}`);
 console.log(`Orbi Plugin Tools ${version}${dev ? ' (dev)' : ''}: ${listing.length} extensões em dist/extensions`);
 for (const l of listing) console.log(`  • ${l.id}${l.debugPort ? `  (DevTools: http://localhost:${l.debugPort})` : ''}`);
